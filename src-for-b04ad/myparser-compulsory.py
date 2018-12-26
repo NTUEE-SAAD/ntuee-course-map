@@ -27,9 +27,9 @@ class course():
             f.write(' - {}\n'.format(comm))
 
 
-data = np.array(pd.read_csv('../dat/elective.csv', header=None))
+data = np.array(pd.read_csv('../dat/compulsory.csv', header=None))
 
-category = {}
+courses = []
 
 for row in data:
     course_i = course(row[0], row[1], row[2])
@@ -42,16 +42,11 @@ for row in data:
             break
         else:
             course_i.addComment(row[i])
+    courses.append(course_i)
 
-    if row[0] in category:
-        category[row[0]].append(course_i)
-    else:
-        category[row[0]] = [course_i]
-
-for cate in category:
-    with open('../result/elective/{}.md'.format(cate), 'w') as f:
-        f.write('# {}\n'.format(cate))
-        for course_i in category[cate]:
-            course_i.dump(f)
+with open('../result/compulsory.md', 'w') as f:
+    f.write('# 必修\n')
+    for course_i in courses:
+        course_i.dump(f)
 
 
