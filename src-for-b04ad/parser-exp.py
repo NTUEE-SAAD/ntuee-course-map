@@ -1,60 +1,19 @@
+import csv
 
-# coding: utf-8
-
-# In[1]:
-
-import numpy as np
-import pandas as pd
-
-
-# In[2]:
-
-data = pd.read_csv("../dat/exp.csv",sep=',', header=None) #10選2
-
-
-# In[3]:
-
-data.sort_values(1)
-data = data.fillna(0)
-
-
-# In[4]:
-
-data
-
-
-# In[5]:
-
-# domain = data.get(0) # no use
-course = data.get(1)
-prof = data.get(2)
-recom = data.get(3)
-content1 = data.get(4)
-content2 = data.get(5)
-
-
-# In[6]:
-
-f = open('../result/exp.md', 'w')
-
-
-# In[9]:
-
-for i in range(len(data)):
-    f.write("> " + str(course[i]) + "\n\n")
-    f.write("* 開課教授：" + str(prof[i]) + "\n")
-    f.write("* 相關領域：" + str(recom[i]) + "\n")
-    f.write("* 課程小卦：\n")
-    if content1[i] != 0:
-        tmp = content1[i].replace('\n', '')
-        f.write("  1. " + tmp + "\n")
-    if content2[i] != 0:
-        tmp = content2[i].replace('\n', '')
-        f.write("  2. " + tmp + "\n")
-    f.write("\n")
-
-
-# In[ ]:
-
-
-
+with open("../dat/exp.csv", 'r') as infile: #10選2
+    data = csv.reader(infile)
+    f = open("../result/exp.md", 'w')
+    for course in data:
+        f.write("> " + str(course[0]) + "\n\n")
+        f.write("* 開課教授：" + str(course[1]) + "\n")
+        f.write("* 推薦同時修習的課程：" + str(course[2]) + "\n")
+        f.write("* 推薦預先修習的課程：" + str(course[3]) + "\n")
+        f.write("* 課程小卦：\n")
+        k = 1
+        for i in range(4,len(course)):
+            if course[i] != '':
+                tmp = course[i].replace('\n', '')
+                f.write("  {}. ".format(k) + tmp + "\n")
+                k += 1
+        f.write("\n")
+    f.close()
